@@ -13,16 +13,24 @@ export default function CardMovies({
 	id,
 	titulo,
 	dataPub,
-	urlImg = "https://www.themoviedb.org/t/p/w1280/geCRueV3ElhRTr0xtJuEWJt6dJ1.jpg",
+	urlImg = "https://placehold.co/350x450?text=Capa+n%C3%A3o+Encontrada",
 	voteAverage,
 }: CardMoviesProps) {
+	const isUrlValid = urlImg
+		? `https://image.tmdb.org/t/p/original/${urlImg}`
+		: "https://placehold.co/350x450?text=Capa+n%C3%A3o+Encontrada";
+
 	return (
 		<Link
 			to={`/movie/${id}`}
 			className="relative rounded-md overflow-hidden shadow-lg w-[300px] h-[450px] max-w-full hover:scale-105 transition-all duration-300 ease-in-out"
 		>
 			<div>
-				<img loading="lazy" src={`https://image.tmdb.org/t/p/original/${urlImg}`} alt={titulo} />
+				<img
+					loading="lazy"
+					src={isUrlValid}
+					alt={titulo}
+				/>
 			</div>
 			<div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
 				<h2 className="font-bold text-2xl text-white">{titulo}</h2>

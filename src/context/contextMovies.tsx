@@ -1,6 +1,7 @@
 import { fetchMovies } from "@/utils/moviesFunctions";
 import { createContext, useEffect, useState } from "react";
-import { movieArraySchema, Movie } from '@/schemas/movieSchema'
+import type { Movie } from "@/schemas/moviesSchema"; 
+import  { movieArraySchema } from "@/schemas/moviesSchema";
 import { z } from "zod";
 
 interface MoviePropsContext {

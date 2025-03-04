@@ -9,53 +9,20 @@ import { Card } from "./ui/card";
 import { useEffect, useState } from "react";
 import api from "@/services/api";
 import { useParams } from "react-router-dom";
-import type {
-	FlatrateProps,
-} from "@/interfaces/moviesContextProps";
-import { MovieProps } from "@/interfaces/movieProps";
+import type { MovieProps } from "@/schemas/movieSchema";
+import {
+	providerMovieValidetor,
+	type FlatrateProps,
+} from "@/schemas/movieSchema";
+import { z } from "zod";
+import {
+	formatBudget,
+	formatDate,
+	formatDuration,
+	formatVote,
+	formatVoteCount,
+} from "@/utils/MovieFunctions";
 
-
-function formatDuration(runtime: number | undefined): string {
-	if (!runtime || runtime <= 0) return "Não disponível";
-
-	const hours = Math.floor(runtime / 60);
-	const minutes = runtime % 60;
-
-	if (hours === 0) return `${minutes} minutos`;
-	if (minutes === 0) return `${hours} horas`;
-	return `${hours} horas e ${minutes} minutos`;
-}
-
-function formatDate(dateStr: string): string {
-	if (!dateStr) return "N/A";
-
-	const [year, month, day] = dateStr.split("-");
-	return `${day}/${month}/${year}`;
-}
-
-function formatVote(vote_average: number) {
-	if (!vote_average) return "0.0";
-	const calculo = Math.min(vote_average, 10) / 2;
-	return calculo.toFixed(1);
-}
-
-function formatVoteCount(voteCount: number | undefined): string {
-	if (!voteCount || voteCount < 0) return "N/A";
-
-	return new Intl.NumberFormat("pt-BR", {
-		notation: "compact",
-		compactDisplay: "short",
-	}).format(voteCount);
-}
-
-function formatBudget(budget: number) {
-	if (!budget || budget <= 0) return "Não disponível";
-
-	return new Intl.NumberFormat("pt-BR", {
-		style: "currency",
-		currency: "BRL",
-	}).format(budget);
-}
 export default function CardMovie({
 	title,
 	original_title,
@@ -79,24 +46,30 @@ export default function CardMovie({
 		async function fetchProviderFilms() {
 			try {
 				const response = await api.get(`/movie/${id}/watch/providers`);
-				const providerBR = response.data.results?.BR?.flatrate || [];
+				const validatedData = providerMovieValidetor.parse(response.data);
+				const providerBR = validatedData.results?.BR?.flatrate || [];
 				setProviderFilms(providerBR);
-				console.log(providerBR);
 			} catch (error) {
 				setProviderFilms([]);
 				console.error(error);
+				if (error instanceof z.ZodError) {
+					console.error("Erro de validação:", error.errors);
+				}
 			}
 		}
-
 		fetchProviderFilms();
 	}, [id]);
+
+	const posterUrl = poster_path
+		? `https://image.tmdb.org/t/p/original/${poster_path}`
+		: "https://placehold.co/350x450?text=Capa+nao+Encontrada";
 
 	return (
 		<div>
 			<div className="flex flex-row justify-center gap-12">
 				<div>
 					<img
-						src={`https://image.tmdb.org/t/p/original/${poster_path}`}
+						src={posterUrl}
 						alt={title}
 						className="w-[350px] h-[500px] min-w-[350px] min-h-[500px] rounded-md"
 					/>
@@ -140,11 +113,11 @@ export default function CardMovie({
 						</div>
 					</div>
 
-					{providerFilms && providerFilms.length > 0 && (
+					{providerFilms.length > 0 && (
 						<div className="flex flex-col gap-1.5 my-4">
 							<strong className="text-2xl">Disponivel em:</strong>
 							<div className="flex gap-2">
-								{providerFilms?.map((provider) => (
+								{providerFilms.map((provider) => (
 									<img
 										src={`https://image.tmdb.org/t/p/w300/${provider.logo_path}`}
 										alt={provider.provider_name}
@@ -204,7 +177,7 @@ export default function CardMovie({
 
 				<div className="flex flex-col gap-2">
 					<div className="flex flex-col">
-						<strong>Idiomas</strong>
+						<strong>{spoken_languages.length > 1 ? "Idiomas" : "Idioma"}</strong>
 						<span>
 							{spoken_languages
 								.map((language) => language.english_name)
@@ -223,14 +196,14 @@ export default function CardMovie({
 					</div>
 
 					<div className="flex flex-col">
-						<strong>Produtora:</strong>
+						<strong>{production_companies.length > 1 ? "Produtoras" : "Produtora"}</strong>
 						<span>
 							{production_companies.map((company) => company.name).join(", ")}
 						</span>
 					</div>
 
 					<div className="flex flex-col">
-						<strong>País de origem:</strong>
+						<strong>Produzido em:</strong>
 						<span>
 							{production_countries.map((company) => company.name).join(", ")}
 						</span>
