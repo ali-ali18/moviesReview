@@ -205,7 +205,7 @@ export default function CardMovie({
 					<div className="flex flex-col">
 						<strong>Produzido em:</strong>
 						<span>
-							{production_countries.map((company) => company.name).join(", ")}
+							{production_countries.map((company) => company.name).join(", ") || 'Não disponível'}
 						</span>
 					</div>
 				</div>
