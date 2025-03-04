@@ -1,12 +1,14 @@
 import CardMovie from "@/components/cardMovie";
-import type { MovieProps } from "@/interfaces/movieProps"; 
 import CardMovies from "@/components/cardMovies";
-import type { Movie } from "@/schemas/movieSchema";
+import type { Movie } from "@/schemas/moviesSchema"; 
 import api from "@/services/api";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { movieValidatedDados } from "@/schemas/movieSchema";
+import type { MovieProps } from "@/schemas/movieSchema"; 
+import { z } from "zod";
 
-export default function Movie() {
+export default function MoviePage() {
 	const { id } = useParams();
 	const [movie, setMovie] = useState<MovieProps>();
 	const [movieSimilars, setMovieSimilars] = useState<Movie[]>();
@@ -15,9 +17,13 @@ export default function Movie() {
 		async function fetchMovie() {
 			try {
 				const response = await api.get(`/movie/${id}?language=pt-BR`);
-				setMovie(response.data);
+				const validatedData = movieValidatedDados.parse(response.data);
+				setMovie(validatedData);
 			} catch (error) {
 				console.error(error);
+				if (error instanceof z.ZodError) {
+					console.error('Erro de validação:', error.errors);
+				}
 			}
 		}
 
@@ -37,9 +43,7 @@ export default function Movie() {
 		}
 		fetchMovieSimilars();
 	}, [id]);
-
-
-
+	
 	return (
 		<div className="flex flex-col">
 			{movie && <CardMovie {...movie} />}
