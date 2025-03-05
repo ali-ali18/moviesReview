@@ -25,7 +25,7 @@ function ContextMoviesProvide({ children }: { children: React.ReactNode }) {
 	useEffect(() => {
 		async function LoadMovies() {
             try {
-                const fetchMoviesPage = await fetchMovies({ limit: 8, typeCategoryMovie: "popular", page: 1 });
+                const fetchMoviesPage = await fetchMovies({ limit: 20, typeCategoryMovie: "popular", page: 1 });
                 const validationMovies = movieArraySchema.parse(fetchMoviesPage);
                 setMoviesPopular(validationMovies);
             } catch (err) {
@@ -42,7 +42,7 @@ function ContextMoviesProvide({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         async function LoadMovies() {
             try {
-                const fetchMoviesPage = await fetchMovies({ limit: 8, typeCategoryMovie: "now_playing", page: 1 });
+                const fetchMoviesPage = await fetchMovies({ limit: 20, typeCategoryMovie: "now_playing", page: 1 });
                 const validationMovies = movieArraySchema.parse(fetchMoviesPage);
                 setMoviesNowPlaying(validationMovies);
             } catch (err) {
@@ -59,7 +59,7 @@ function ContextMoviesProvide({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         async function LoadMovies() {
             try {
-                const fetchMoviesPage = await fetchMovies({ limit: 8, typeCategoryMovie: "top_rated", page: 1 });
+                const fetchMoviesPage = await fetchMovies({ limit: 20, typeCategoryMovie: "top_rated", page: 1 });
                 const validationMovies = movieArraySchema.parse(fetchMoviesPage);
                 setMoviesTopRated(validationMovies);
             } catch (err) {

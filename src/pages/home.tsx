@@ -1,4 +1,4 @@
-import CardMovies from "@/components/cardMovies";
+import CarouselCards from "@/components/carouselCards";
 import ComponentLoading from "@/components/componentLoading";
 import { Input } from "@/components/ui/input";
 import { ContextMovies } from "@/context/contextMovies";
@@ -13,7 +13,7 @@ export default function Home() {
 			setLoading(false);
 			clearTimeout(timer);
 			return () => clearTimeout(timer);
-		}, 2500);
+		}, 2000);
 	}
 
 	Loading();
@@ -37,53 +37,20 @@ export default function Home() {
 				</form>
 			</div>
 
-			<div className="w-full h-full">
+			<div className="w-full h-full flex flex-col gap-4">
 				<strong className="text-2xl">Filmes Populares</strong>
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center my-4 gap-5">
-					{moviesPopular.map((movie) => (
-						<CardMovies
-							key={movie.id}
-							id={movie.id}
-							titulo={movie.title}
-							dataPub={movie.release_date}
-							urlImg={movie.poster_path}
-							voteAverage={
-								movie.vote_average ? Math.min(movie.vote_average, 10) / 2 : 0
-							}
-						/>
-					))}
+				<div className="w-full flex">
+				<CarouselCards setter={moviesPopular} />
 				</div>
 
 				<strong className="text-2xl">Lançamentos</strong>
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center my-4 gap-5">
-					{moviesNowPlaying.map((movie) => (
-						<CardMovies
-							key={movie.id}
-							id={movie.id}
-							titulo={movie.title}
-							dataPub={movie.release_date}
-							urlImg={movie.poster_path}
-							voteAverage={
-								movie.vote_average ? Math.min(movie.vote_average, 10) / 2 : 0
-							}
-						/>
-					))}
+				<div>
+					<CarouselCards setter={moviesNowPlaying} />
 				</div>
 
 				<strong className="text-2xl">Melhores avaliações</strong>
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center my-4 gap-5">
-					{moviesTopRated.map((movie) => (
-						<CardMovies
-							key={movie.id}
-							id={movie.id}
-							titulo={movie.title}
-							dataPub={movie.release_date}
-							urlImg={movie.poster_path}
-							voteAverage={
-								movie.vote_average ? Math.min(movie.vote_average, 10) / 2 : 0
-							}
-						/>
-					))}
+				<div>
+					<CarouselCards setter={moviesTopRated} />
 				</div>
 			</div>
 		</div>
