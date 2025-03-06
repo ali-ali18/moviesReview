@@ -23,7 +23,7 @@ export default function SheetNav() {
 
 		if(query) {
 			await searchMovie(query);
-			navigate('/results');
+			navigate('/movies/results');
 			setQuery('');
 		}
 	}
