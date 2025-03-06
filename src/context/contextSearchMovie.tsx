@@ -12,8 +12,8 @@ interface SearchMovieProviderProps {
 }
 
 export const SearchMovieContext = createContext({
-	searchMovie: async (query: string) => {},
-    moviesSearch: []
+	searchMovie: async (_query: string) => {},
+	moviesSearch: []
 } as SearchMovieContextProps);
 
 function SearchProvider({ children }: SearchMovieProviderProps) {
