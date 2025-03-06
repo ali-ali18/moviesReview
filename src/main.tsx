@@ -5,13 +5,16 @@ import { RouterProvider } from "react-router-dom";
 import router from "./App";
 import { ThemeProvider } from "./components/theme/themeProvider";
 import ContextMoviesProvide from "./context/contextMovies";
+import SearchProvider from "./context/contextSearchMovie";
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
 		<ThemeProvider defaultTheme="system" storageKey="themeMovie">
-			<ContextMoviesProvide>
-				<RouterProvider router={router} />
-			</ContextMoviesProvide>
+			<SearchProvider>
+				<ContextMoviesProvide>
+					<RouterProvider router={router} />
+				</ContextMoviesProvide>
+			</SearchProvider>
 		</ThemeProvider>
 	</StrictMode>,
 );

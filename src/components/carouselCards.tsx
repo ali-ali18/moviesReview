@@ -20,7 +20,7 @@ interface Setter {
 
 export default function CarouselCards({ setter }: Setter) {
 	return (
-		<Carousel className="w-full max-w-7xl mx-auto" opts={{ dragFree: true, align: "center" }}>
+		<Carousel className="w-full max-w-full" opts={{ dragFree: true,  }}>
 			<CarouselContent className="w-[300px] sm:w-full">
 				{setter.map((movie) => (
 					<CarouselItem
@@ -43,8 +43,8 @@ export default function CarouselCards({ setter }: Setter) {
 				))}
 			</CarouselContent>
 			<div className="hidden xl:flex">
-				<CarouselPrevious size={"lg"} className="w-10 h-10" />
-				<CarouselNext size={"lg"} className="w-10 h-10" />
+				<CarouselPrevious size={"icon"} />
+				<CarouselNext size={"icon"}  />
 			</div>
 		</Carousel>
 	);
