@@ -1,11 +1,11 @@
 import CardMovie from "@/components/cardMovie";
 import CardMovies from "@/components/cardMovies";
-import type { Movie } from "@/schemas/moviesSchema"; 
+import type { Movie } from "@/schemas/moviesSchema";
 import api from "@/services/api";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { movieValidatedDados } from "@/schemas/movieSchema";
-import type { MovieProps } from "@/schemas/movieSchema"; 
+import type { MovieProps } from "@/schemas/movieSchema";
 import { z } from "zod";
 
 export default function MoviePage() {
@@ -22,7 +22,7 @@ export default function MoviePage() {
 			} catch (error) {
 				console.error(error);
 				if (error instanceof z.ZodError) {
-					console.error('Erro de validação:', error.errors);
+					console.error("Erro de validação:", error.errors);
 				}
 			}
 		}
@@ -43,7 +43,7 @@ export default function MoviePage() {
 		}
 		fetchMovieSimilars();
 	}, [id]);
-	
+
 	return (
 		<div className="flex flex-col">
 			{movie && <CardMovie {...movie} />}

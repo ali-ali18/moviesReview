@@ -6,13 +6,16 @@ import router from "./App";
 import { ThemeProvider } from "./components/theme/themeProvider";
 import ContextMoviesProvide from "./context/contextMovies";
 import SearchProvider from "./context/contextSearchMovie";
+import { ContextFavoritosProvider } from "./context/contextFavoritos";
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
 		<ThemeProvider defaultTheme="system" storageKey="themeMovie">
 			<SearchProvider>
 				<ContextMoviesProvide>
-					<RouterProvider router={router} />
+					<ContextFavoritosProvider>
+						<RouterProvider router={router} />
+					</ContextFavoritosProvider>
 				</ContextMoviesProvide>
 			</SearchProvider>
 		</ThemeProvider>
