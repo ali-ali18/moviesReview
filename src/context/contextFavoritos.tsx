@@ -1,5 +1,6 @@
 import type { Movie } from "@/schemas/moviesSchema";
 import { createContext, useState } from "react";
+import { toast } from "sonner";
 
 interface FavoritosContextValue {
 	addFavorito: (item: Movie) => void;
@@ -33,6 +34,7 @@ function ContextFavoritosProvider({ children }: ContextFavoritosProviderProps) {
 				const novoArray = prev.filter((fav) => fav.id !== id);
 
 				localStorage.setItem("favoritos", JSON.stringify(novoArray));
+                toast.success('Filme removido dos favoritos');
 				return novoArray;
 			}
 
@@ -41,6 +43,7 @@ function ContextFavoritosProvider({ children }: ContextFavoritosProviderProps) {
 				{ title, vote_average, release_date, poster_path, id },
 			];
 			localStorage.setItem("favoritos", JSON.stringify(novoArray));
+            toast.success('Filme adicionado aos favoritos');
 			return novoArray;
 		});
 	}
