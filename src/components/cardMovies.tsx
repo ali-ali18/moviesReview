@@ -23,7 +23,7 @@ export default function CardMovies({
 	return (
 		<Link
 			to={`/movie/${id}`}
-			className="relative  rounded-lg overflow-hidden shadow-lg w-[300px] h-[350px] max-w-full"
+			className="relative  rounded-lg overflow-hidden shadow-lg w-[350px] h-[450px] max-w-full"
 		>
 			<div>
 				<img
