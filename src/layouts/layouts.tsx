@@ -11,7 +11,7 @@ export default function Layouts() {
 			<main className="max-w-6xl mx-auto p-4 min-h-screen">
 				<Outlet />
 			</main>
-			<Toaster/>
+			<Toaster closeButton position="top-right" />
 		</div>
 	);
 }

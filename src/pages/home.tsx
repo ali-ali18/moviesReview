@@ -42,7 +42,7 @@ export default function Home() {
 		<div>
 			<div className="flex justify-between flex-col md:flex-row items-center">
 				<h2 className="text-2xl font-medium flex-1 gap-3">
-					Explorar Filmes e Séries
+					Explore os melhores filmes
 				</h2>
 				<form onSubmit={handleSubmit} className="flex w-full justify-center md:justify-end flex-1 gap-2">
 					<Input

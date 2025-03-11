@@ -27,7 +27,7 @@ export default function CardMovies({
 		>
 			<div>
 				<img
-				className="w-[300px] h-[450px] max-w-full object-cover"
+				className="w-full h-[450px] max-w-full object-cover"
 					loading="lazy"
 					src={isUrlValid}
 					alt={titulo}
