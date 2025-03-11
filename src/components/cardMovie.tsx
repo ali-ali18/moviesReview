@@ -1,12 +1,6 @@
-import { Heart, Play } from "lucide-react";
+import { Heart, HeartOff, Play } from "lucide-react";
 import { Button } from "./ui/button";
-import {
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
-} from "@radix-ui/react-hover-card";
-import { Card } from "./ui/card";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import api from "@/services/api";
 import { useParams } from "react-router-dom";
 import type { MovieProps } from "@/schemas/movieSchema";
@@ -22,8 +16,10 @@ import {
 	formatVote,
 	formatVoteCount,
 } from "@/utils/MovieFunctions";
+import { ContextFavoritos } from "@/context/contextFavoritos";
 
 export default function CardMovie({
+	id: movieId,
 	title,
 	original_title,
 	overview,
@@ -41,6 +37,9 @@ export default function CardMovie({
 }: MovieProps) {
 	const { id } = useParams();
 	const [providerFilms, setProviderFilms] = useState<FlatrateProps[]>([]);
+	const { addFavorito, favoritos } = useContext(ContextFavoritos);
+
+	const isFavorite = favoritos.some((fav) => fav.id === movieId);
 
 	useEffect(() => {
 		async function fetchProviderFilms() {
@@ -65,7 +64,7 @@ export default function CardMovie({
 		: "https://placehold.co/350x450?text=Capa+nao+Encontrada";
 
 	return (
-		<div>
+		<div key={movieId}>
 			<div className="flex flex-row justify-center gap-12">
 				<div>
 					<img
@@ -135,49 +134,42 @@ export default function CardMovie({
 							{overview || "Não disponível"}
 						</p>
 						<div className="flex gap-2.5">
-							<HoverCard>
-								<HoverCardTrigger asChild>
-									<Button
-										variant={"outline"}
-										className="cursor-pointer flex gap-1 items-center justify-center"
-										asChild
-									>
-										<a
-											target="__blank"
-											href={`https://www.youtube.com/results?search_query=${title}+trailer`}
-										>
-											<Play />
-										</a>
-									</Button>
-								</HoverCardTrigger>
-								<HoverCardContent className="my-1.5">
-									<Card className="p-1.5 rounded-sm">
-										<p>Assistir ao trailer</p>
-									</Card>
-								</HoverCardContent>
-							</HoverCard>
-							<HoverCard>
-								<HoverCardTrigger asChild>
-									<Button
-										variant={"outline"}
-										className="cursor-pointer flex gap-1 items-center justify-center"
-									>
-										<Heart />
-									</Button>
-								</HoverCardTrigger>
-								<HoverCardContent className="my-1.5">
-									<Card className="p-1.5 rounded-sm">
-										<p>Adicionar aos favoritos</p>
-									</Card>
-								</HoverCardContent>
-							</HoverCard>
+							<Button
+								variant={"outline"}
+								className="cursor-pointer flex gap-1 items-center justify-center"
+							>
+								<a
+									target="__blank"
+									href={`https://www.youtube.com/results?search_query=${title}+trailer`}
+								>
+									<Play className="size-5"/>
+								</a>
+							</Button>
+
+							<Button
+								variant={"outline"}
+								className="cursor-pointer flex gap-1 items-center justify-center"
+								onClick={() =>
+									addFavorito({
+										id: movieId,
+										poster_path: posterUrl,
+										release_date,
+										title,
+										vote_average,
+									})
+								}
+							>
+								{isFavorite ? <HeartOff className="size-5"/> : <Heart className="size-5"/>}
+							</Button>
 						</div>
 					</div>
 				</div>
 
 				<div className="flex flex-col gap-2">
 					<div className="flex flex-col">
-						<strong>{spoken_languages.length > 1 ? "Idiomas" : "Idioma"}</strong>
+						<strong>
+							{spoken_languages.length > 1 ? "Idiomas" : "Idioma"}
+						</strong>
 						<span>
 							{spoken_languages
 								.map((language) => language.english_name)
@@ -196,7 +188,9 @@ export default function CardMovie({
 					</div>
 
 					<div className="flex flex-col">
-						<strong>{production_companies.length > 1 ? "Produtoras" : "Produtora"}</strong>
+						<strong>
+							{production_companies.length > 1 ? "Produtoras" : "Produtora"}
+						</strong>
 						<span>
 							{production_companies.map((company) => company.name).join(", ")}
 						</span>
@@ -205,7 +199,8 @@ export default function CardMovie({
 					<div className="flex flex-col">
 						<strong>Produzido em:</strong>
 						<span>
-							{production_countries.map((company) => company.name).join(", ") || 'Não disponível'}
+							{production_countries.map((company) => company.name).join(", ") ||
+								"Não disponível"}
 						</span>
 					</div>
 				</div>
