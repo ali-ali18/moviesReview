@@ -65,39 +65,39 @@ export default function CardMovie({
 
 	return (
 		<div key={movieId}>
-			<div className="flex flex-row justify-center gap-12">
-				<div>
+			<div className="flex flex-col xl:flex-row justify-center gap-2 md:gap-7">
+				<div className="flex justify-center">
 					<img
 						src={posterUrl}
 						alt={title}
-						className="w-[350px] h-[500px] min-w-[350px] min-h-[500px] rounded-md"
+						className="w-[350px] h-[500px] max-w-full md:min-w-[370px] min-h-[500px] rounded-md"
 					/>
 				</div>
 
 				<div className="flex flex-col gap-2">
-					<div className="flex flex-col gap-1">
-						<h1 className="text-5xl font-medium capitalize">{title}</h1>
-						<strong className="text-xl text-muted-foreground font-medium mt-1">
+					<div className="flex flex-col md:gap-1">
+						<h1 className=" text-3xl md:text-4xl lg:text-5xl font-medium capitalize">{title}</h1>
+						<strong className="text-xl text-muted-foreground font-medium md:mt-1">
 							{original_title}
 						</strong>
 					</div>
 
-					<div className="flex gap-2 text-lg">
-						<span>
+					<div className="flex flex-col md:flex-row md:gap-2 text-lg">
+						<span className="flex gap-1 items-center">
 							<strong>Lançamento:</strong> {formatDate(release_date)}
 						</span>
-						<p>-</p>
+						<p className="hidden md:block">-</p>
 						<span>
 							<strong>Duração:</strong> {formatDuration(runtime)}
 						</span>
 					</div>
 
-					<div className="flex gap-2 text-lg">
+					<div className="flex flex-col md:flex-row md:gap-2 text-lg">
 						<span className="flex gap-1 items-center">
 							<strong>Média de avaliações:</strong> {formatVote(vote_average)}/5
 						</span>
-						<p>-</p>
-						<span>
+						<p className="hidden md:block">-</p>
+						<span className="flex gap-1 items-center">
 							<strong>Quantidade de avaliações:</strong>{" "}
 							{formatVoteCount(vote_count)}
 						</span>
@@ -130,7 +130,7 @@ export default function CardMovie({
 
 					<div className="flex flex-col gap-1 ">
 						<h3 className="text-2xl font-bold">Sinopse</h3>
-						<p className="w-[550px] max-w-full text-lg">
+						<p className="w-full max-w-full text-lg">
 							{overview || "Não disponível"}
 						</p>
 						<div className="flex gap-2.5">
@@ -142,7 +142,7 @@ export default function CardMovie({
 									target="__blank"
 									href={`https://www.youtube.com/results?search_query=${title}+trailer`}
 								>
-									<Play className="size-5"/>
+									<Play className="size-5" />
 								</a>
 							</Button>
 
@@ -159,7 +159,11 @@ export default function CardMovie({
 									})
 								}
 							>
-								{isFavorite ? <HeartOff className="size-5"/> : <Heart className="size-5"/>}
+								{isFavorite ? (
+									<HeartOff className="size-5" />
+								) : (
+									<Heart className="size-5" />
+								)}
 							</Button>
 						</div>
 					</div>
