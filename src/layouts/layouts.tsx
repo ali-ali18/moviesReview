@@ -1,9 +1,11 @@
 import Header from "@/components/header";
 import { Toaster } from "@/components/ui/sonner";
+import scrollTop from "@/utils/scrollTop";
 
 import { Outlet } from "react-router-dom";
 
 export default function Layouts() {
+	scrollTop()
 	return (
 		<div>
 			<Header />
