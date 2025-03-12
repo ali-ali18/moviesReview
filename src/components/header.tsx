@@ -1,4 +1,4 @@
-import { Clapperboard, Compass } from "lucide-react";
+import { Clapperboard, Compass, Flame } from "lucide-react";
 import ToggleTheme from "./theme/toggleTheme";
 import { Link, useLocation } from "react-router-dom";
 import DrawerNav from "./drawerNav";
@@ -24,10 +24,16 @@ export default function Header() {
 					<Compass /> Explorer
 				</Link>
 				<Link
-					to="moviesfavorites"
+					to="/moviesfavorites"
 					className={getLink(location.pathname === "/moviesfavorites")}
 				>
 					<Clapperboard /> Meus Filmes
+				</Link>
+				<Link
+					to="/movies/tendencias"
+					className={getLink(location.pathname === "/movies/tendencias")}
+				>
+					<Flame /> Tendências
 				</Link>
 			</nav>
 

@@ -1,4 +1,4 @@
-import { Clapperboard, Compass, Menu } from "lucide-react";
+import { Clapperboard, Compass, Flame, Menu } from "lucide-react";
 import { Drawer, DrawerContent, DrawerTrigger } from "./ui/drawer";
 import ButtonNav from "./headerComponents/buttonNavMoba";
 
@@ -15,6 +15,9 @@ export default function DrawerNav() {
 					</ButtonNav>
 					<ButtonNav url="/moviesfavorites">
 						<Clapperboard /> Meus Filmes
+					</ButtonNav>
+					<ButtonNav url="/movies/tendencias">
+						<Flame /> Tendências
 					</ButtonNav>
 				</ul>
 			</DrawerContent>
