@@ -4,6 +4,7 @@ import Home from "./pages/home";
 import MoviePage from "./pages/movie";
 import SearchMovie from "./pages/SearchMovie";
 import MoviesFavorites from "./pages/moviesFavoritos";
+import AllMovies from "./pages/allMovies";
 
 const router = createBrowserRouter([
 	{
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
 			{
 				path: '/moviesfavorites',
 				element: <MoviesFavorites />
+			},
+			{
+				path: '/movies/tendencias',
+				element: <AllMovies/>
 			}
 		],
 	},
