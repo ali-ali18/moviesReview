@@ -56,18 +56,6 @@ export default function AllMovies() {
 		fetchMovies({ page: currentPage, limit: 20, typeCategoryMovie: "popular" });
 	}, [currentPage]);
 
-	// Funções para navegar entre páginas
-	const goToPreviousPage = () => {
-		if (currentPage > 1) {
-			setCurrentPage((prev) => prev - 1);
-		}
-	};
-
-	const goToNextPage = () => {
-		if (currentPage < totalPages) {
-			setCurrentPage((prev) => prev + 1);
-		}
-	};
 
 	if (loading) {
 		return <ComponentLoading />;
