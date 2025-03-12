@@ -38,7 +38,7 @@ export default function AllMovies() {
 				`/movie/${typeCategoryMovie}?language=pt-BR&page=${page}`,
 			);
 			const allMovies = response.data.results;
-			const totalPagesFromApi = response.data.total_pages;
+			const totalPagesFromApi = Math.min(response.data.total_pages, 500);
 			const limitFilms = allMovies.slice(0, limit);
 			setMovies(limitFilms);
 			setTotalPages(totalPagesFromApi);
@@ -54,6 +54,7 @@ export default function AllMovies() {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		fetchMovies({ page: currentPage, limit: 20, typeCategoryMovie: "popular" });
+		scrollTo(0, 0);
 	}, [currentPage]);
 
 
