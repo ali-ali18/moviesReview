@@ -1,4 +1,4 @@
-import { Clapperboard, Compass, Flame } from "lucide-react";
+import { Clapperboard, Compass, Flame, Triangle } from "lucide-react";
 import ToggleTheme from "./theme/toggleTheme";
 import { Link, useLocation } from "react-router-dom";
 import DrawerNav from "./drawerNav";
@@ -17,8 +17,11 @@ export default function Header() {
 	};
 	return (
 		<header className={styleHeader}>
-			<h1>Logo</h1>
-
+			<Link to="/" className="hover:opacity-60 transition-all duration-300 m-1">
+				<h1>
+					<Triangle size={30} className="rotate-90"/>
+				</h1>
+			</Link>
 			<nav className="gap-4 text-sm hidden md:flex">
 				<Link to="/" className={getLink(location.pathname === "/")}>
 					<Compass /> Explorer
@@ -37,9 +40,9 @@ export default function Header() {
 				</Link>
 			</nav>
 
-            <div className="md:hidden">
-                <SheetNav/>
-            </div>
+			<div className="md:hidden">
+				<SheetNav />
+			</div>
 
 			<div className="flex justify-center items-center gap-2.5">
 				<ToggleTheme />
