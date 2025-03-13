@@ -3,12 +3,8 @@ import {
 	PaginationLink,
 	PaginationEllipsis,
 } from "@/components/ui/pagination";
+import type { PagesProps, PaginationItemsProps } from "@/interfaces/PaginationItemsProps";
 
-interface PagesProps {
-	setter: React.Dispatch<React.SetStateAction<number>>;
-	page: number;
-	totalPages: number;
-}
 
 export function goPreviousPage({ page, setter }: PagesProps) {
 	if (page > 1) {
@@ -20,12 +16,6 @@ export function goNextPage({ page, setter, totalPages }: PagesProps) {
 	if (page < totalPages) {
 		setter((prev) => prev + 1);
 	}
-}
-
-interface PaginationItemsProps {
-	currentPage: number;
-	totalPages: number;
-	setCurrentPage: (page: number) => void;
 }
 
 export function getPaginationItems({
@@ -48,7 +38,7 @@ export function getPaginationItems({
 							setCurrentPage(i);
 						}}
 						isActive={currentPage === i}
-						className={isMobile ? "text-sm px-2" : "text-base px-3"} // Compacta em mobile
+						className={isMobile ? "text-sm px-2" : "text-base px-3"}
 					>
 						{i}
 					</PaginationLink>
