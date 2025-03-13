@@ -1,9 +1,13 @@
+import { Skeleton } from "./ui/skeleton";
+
 export default function ComponentLoading() {
     return (
-        <div className="flex items-center justify-center space-x-2 min-h-screen">
-            <div className="animate-bounce bg-purple-700 rounded-full h-3 w-3 " />
-            <div className="animate-bounce bg-purple-700 rounded-full h-3 w-3 delay-200 " />
-            <div className="animate-bounce bg-purple-700 rounded-full h-3 w-3 delay-400" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 items-center justify-center">
+            {Array.from({ length: 20 }).map((_) => (
+                <div key={`${Math.random()}`}>
+                    <Skeleton className="w-full md:w-[264px] h-[450px]" />
+                </div>
+            ))}
         </div>
     )
 }
