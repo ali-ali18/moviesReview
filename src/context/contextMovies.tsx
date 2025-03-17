@@ -1,3 +1,4 @@
+
 import { fetchMovies } from "@/utils/moviesFunctions";
 import { createContext, useEffect, useState } from "react";
 import type { Movie } from "@/schemas/moviesSchema"; 
@@ -30,6 +31,7 @@ function ContextMoviesProvide({ children }: { children: React.ReactNode }) {
                 setMoviesPopular(validationMovies);
             } catch (err) {
                 if (err instanceof z.ZodError) {
+                    console.log(err);
                     setError(`Erro ao validar filmes populares: ${err.errors[0].message}`);
                   } else {
                     setError("Erro ao carregar filmes populares");
