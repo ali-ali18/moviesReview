@@ -65,16 +65,16 @@ export default function CardMovie({
 
 	return (
 		<div key={movieId}>
-			<div className="flex flex-col xl:flex-row justify-center gap-2 md:gap-7">
+			<div className="flex flex-col xl:flex-row gap-2 md:gap-7">
 				<div className="flex justify-center">
 					<img
 						src={posterUrl}
 						alt={title}
-						className="w-[350px] h-[500px] max-w-full md:min-w-[370px] min-h-[500px] rounded-md"
+						className="w-[350px] h-[500px] max-w-full md:min-w-[320px] min-h-[500px] rounded-md"
 					/>
 				</div>
 
-				<div className="flex flex-col gap-2">
+				<div className="flex flex-col w-full gap-2">
 					<div className="flex flex-col md:gap-1">
 						<h1 className=" text-3xl md:text-4xl lg:text-5xl font-medium capitalize">{title}</h1>
 						<strong className="text-xl text-muted-foreground font-medium md:mt-1">
@@ -128,12 +128,12 @@ export default function CardMovie({
 						</div>
 					)}
 
-					<div className="flex flex-col gap-1 ">
+					<div className="flex flex-col gap-1">
 						<h3 className="text-2xl font-bold">Sinopse</h3>
 						<p className="w-full max-w-full text-lg">
 							{overview || "Não disponível"}
 						</p>
-						<div className="flex gap-2.5">
+						<div className="flex gap-2.5 my-2">
 							<Button
 								variant={"outline"}
 								className="cursor-pointer flex gap-1 items-center justify-center"
@@ -169,7 +169,7 @@ export default function CardMovie({
 					</div>
 				</div>
 
-				<div className="flex flex-col gap-2">
+				<div className="flex flex-col w-full lg:w-[350px] gap-2">
 					<div className="flex flex-col">
 						<strong>
 							{spoken_languages.length > 1 ? "Idiomas" : "Idioma"}
