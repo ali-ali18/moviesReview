@@ -5,16 +5,21 @@ import {
 } from "@/components/ui/pagination";
 import type { PagesProps, PaginationItemsProps } from "@/interfaces/PaginationItemsProps";
 
+function scrollToTop() {
+	window.scrollTo(0, 0);
+}
 
 export function goPreviousPage({ page, setter }: PagesProps) {
 	if (page > 1) {
 		setter((prev) => prev - 1);
+		window.scrollTo(0,0)
 	}
 }
 
-export function goNextPage({ page, setter, totalPages }: PagesProps) {
+export function goNextPage({ page, setter, totalPages = 1 }: PagesProps) {
 	if (page < totalPages) {
 		setter((prev) => prev + 1);
+		window.scrollTo(0,0)
 	}
 }
 
@@ -36,7 +41,8 @@ export function getPaginationItems({
 						onClick={(e) => {
 							e.preventDefault();
 							setCurrentPage(i);
-						}}
+							scrollToTop();
+						} }
 						isActive={currentPage === i}
 						className={isMobile ? "text-sm px-2" : "text-base px-3"}
 					>
@@ -58,6 +64,7 @@ export function getPaginationItems({
 						onClick={(e) => {
 							e.preventDefault();
 							setCurrentPage(1);
+							scrollToTop();
 						}}
 						className={isMobile ? "text-sm px-2" : "text-base px-3"}
 					>
@@ -79,6 +86,7 @@ export function getPaginationItems({
 						onClick={(e) => {
 							e.preventDefault();
 							setCurrentPage(i);
+							scrollToTop();
 						}}
 						isActive={currentPage === i}
 						className={isMobile ? "text-sm px-2" : "text-base px-3"}
@@ -101,6 +109,7 @@ export function getPaginationItems({
 						onClick={(e) => {
 							e.preventDefault();
 							setCurrentPage(totalPages);
+							scrollToTop();
 						}}
 						className={isMobile ? "text-sm px-2" : "text-base px-3"}
 					>

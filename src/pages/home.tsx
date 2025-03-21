@@ -1,5 +1,4 @@
 import CarouselCards from "@/components/carouselCards";
-import ComponentLoading from "@/components/componentLoading";
 import { Input } from "@/components/ui/input";
 import { ContextMovies } from "@/context/contextMovies";
 import { SearchMovieContext } from "@/context/contextSearchMovie";
@@ -8,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 
 export default function Home() {
 	const { moviesPopular, moviesNowPlaying, moviesTopRated } = useContext(ContextMovies);
-	const [loading, setLoading] = useState(true);
 	const navigate = useNavigate();
 	const [query, setQuery] = useState<string>("");
 	const {searchMovie} = useContext(SearchMovieContext);
@@ -24,20 +22,6 @@ export default function Home() {
 		}
 	}
 
-	function Loading () {
-		const timer = setTimeout(() => {
-			setLoading(false);
-			clearTimeout(timer);
-			return () => clearTimeout(timer);
-		}, 2000);
-	}
-
-	Loading();
-
-	if (loading) {
-		return ( <ComponentLoading />);
-	}
-	
 	return (
 		<div>
 			<div className="flex justify-between flex-col md:flex-row items-center">
