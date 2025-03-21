@@ -1,9 +1,9 @@
 import api from "@/services/api";
 
-interface functionFetchMoviesPopular {
+export interface functionFetchMoviesPopular {
 	typeCategoryMovie: "popular" | "top_rated" | "upcoming" | "now_playing";
-	page: number;
-	limit: number;
+	page?: number;
+	limit?: number;
 }
 
 async function fetchMovies({

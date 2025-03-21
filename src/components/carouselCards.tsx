@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import CardMovies from "./cardMovies";
 import {
 	Carousel,
@@ -19,8 +20,8 @@ interface Setter {
 }
 
 export default function CarouselCards({ setter }: Setter) {
-	return (
-		<Carousel className="w-full max-w-full" opts={{ dragFree: true,  }}>
+	const carouselContent = useMemo(() => {
+		return (
 			<CarouselContent className="w-[300px] sm:w-full">
 				{setter.map((movie) => (
 					<CarouselItem
@@ -42,9 +43,15 @@ export default function CarouselCards({ setter }: Setter) {
 					</CarouselItem>
 				))}
 			</CarouselContent>
+		);
+	}, [setter]);
+
+	return (
+		<Carousel className="w-full max-w-full" opts={{ dragFree: true }}>
+			{carouselContent}
 			<div className="hidden xl:flex">
 				<CarouselPrevious size={"icon"} />
-				<CarouselNext size={"icon"}  />
+				<CarouselNext size={"icon"} />
 			</div>
 		</Carousel>
 	);

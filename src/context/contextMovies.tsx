@@ -1,90 +1,43 @@
-
-import { fetchMovies } from "@/utils/moviesFunctions";
-import { createContext, useEffect, useState } from "react";
-import type { Movie } from "@/schemas/moviesSchema"; 
-import  { movieArraySchema } from "@/schemas/moviesSchema";
-import { z } from "zod";
+import { createContext } from "react";
+import type { Movie } from "@/schemas/moviesSchema";
+import useMovies from "@/hooks/useMovies";
 
 interface MoviePropsContext {
 	moviesPopular: Movie[];
-    moviesNowPlaying: Movie[];
-    moviesTopRated: Movie[];
-}   
+	moviesNowPlaying: Movie[];
+	moviesTopRated: Movie[];
+}
 
 export const ContextMovies = createContext({
 	moviesPopular: [],
-    moviesNowPlaying: [],
-    moviesTopRated: [],
+	moviesNowPlaying: [],
+	moviesTopRated: [],
 } as MoviePropsContext);
 
 function ContextMoviesProvide({ children }: { children: React.ReactNode }) {
-	const [moviesPopular, setMoviesPopular] = useState<Movie[]>([]);
-	const [moviesNowPlaying, setMoviesNowPlaying] = useState<Movie[]>([]);
-	const [moviesTopRated, setMoviesTopRated] = useState<Movie[]>([]);
-    const [error, setError] = useState<string | null>(null);
+	const popularQuery = useMovies({ typeCategoryMovie: "popular" });
+	const nowPlayingQuery = useMovies({ typeCategoryMovie: "now_playing" });
+	const topRatedQuery = useMovies({ typeCategoryMovie: "top_rated" });
 
-	useEffect(() => {
-		async function LoadMovies() {
-            try {
-                const fetchMoviesPage = await fetchMovies({ limit: 20, typeCategoryMovie: "popular", page: 1 });
-                const validationMovies = movieArraySchema.parse(fetchMoviesPage);
-                setMoviesPopular(validationMovies);
-            } catch (err) {
-                if (err instanceof z.ZodError) {
-                    console.log(err);
-                    setError(`Erro ao validar filmes populares: ${err.errors[0].message}`);
-                  } else {
-                    setError("Erro ao carregar filmes populares");
-                  }
-            }
-        }
-        LoadMovies();
-	}, []);
+	const error =
+		popularQuery.error || nowPlayingQuery.error || topRatedQuery.error;
 
-    useEffect(() => {
-        async function LoadMovies() {
-            try {
-                const fetchMoviesPage = await fetchMovies({ limit: 20, typeCategoryMovie: "now_playing", page: 1 });
-                const validationMovies = movieArraySchema.parse(fetchMoviesPage);
-                setMoviesNowPlaying(validationMovies);
-            } catch (err) {
-                if (err instanceof z.ZodError) {
-                    setError(`Erro ao validar filmes em cartaz: ${err.errors[0].message}`);
-                  } else {
-                    setError("Erro ao carregar filmes em cartaz");
-                  }
-            }
-        }
-        LoadMovies();
-    }, [])
-
-    useEffect(() => {
-        async function LoadMovies() {
-            try {
-                const fetchMoviesPage = await fetchMovies({ limit: 20, typeCategoryMovie: "top_rated", page: 1 });
-                const validationMovies = movieArraySchema.parse(fetchMoviesPage);
-                setMoviesTopRated(validationMovies);
-            } catch (err) {
-                if (err instanceof z.ZodError) {
-                    setError(`Erro ao validar filmes em cartaz: ${err.errors[0].message}`);
-                  } else {
-                    setError("Erro ao carregar melhores avaliados");
-                  }
-            }
-        }
-        LoadMovies();
-    }, [])
-
-    if(error) {
-        return (
-            <div>
-                <p>{error}</p>
-            </div>
-        )
-    }
+	if (error) {
+		return (
+			<div>
+				<p>{error.message}</p>
+			</div>
+		);
+	}
 
 	return (
-		<ContextMovies.Provider value={{ moviesPopular, moviesNowPlaying, moviesTopRated,  }}>
+		<ContextMovies.Provider
+			value={{
+				moviesPopular: popularQuery.data || [],
+				moviesNowPlaying: nowPlayingQuery.data || [],
+				moviesTopRated: topRatedQuery.data || [],
+			}}
+		>
 			{children}
 		</ContextMovies.Provider>
 	);

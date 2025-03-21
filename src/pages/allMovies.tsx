@@ -12,8 +12,9 @@ import {
 } from "@/utils/navigationPages";
 import type { Movie } from "@/schemas/moviesSchema";
 import api from "@/services/api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CardMovies from "@/components/cardMovies";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 interface FetchMoviesParams {
 	typeCategoryMovie: "popular" | "top_rated" | "upcoming" | "now_playing";
@@ -21,52 +22,48 @@ interface FetchMoviesParams {
 	limit: number;
 }
 
-export default function AllMovies() {
-	const [movies, setMovies] = useState<Movie[]>([]);
-	const [currentPage, setCurrentPage] = useState(1);
-	const [totalPages, setTotalPages] = useState(1);
-	const [loading, setLoading] = useState(false);
+async function fetchMovies({
+	limit = 8,
+	typeCategoryMovie = "popular",
+	page = 1,
+}: FetchMoviesParams) {
+	const response = await api.get(
+		`/movie/${typeCategoryMovie}?language=pt-BR&page=${page}`,
+	);
+	const allMovies = response.data.results;
+	const totalPagesFromApi = Math.min(response.data.total_pages, 500);
+	const limitFilms = allMovies.slice(0, limit);
+	return { movies: limitFilms, totalPages: totalPagesFromApi };
+}
 
-	async function fetchMovies({
-		limit = 8,
-		typeCategoryMovie = "popular",
-		page = currentPage,
-	}: FetchMoviesParams) {
-		setLoading(true);
-		try {
-			const response = await api.get(
-				`/movie/${typeCategoryMovie}?language=pt-BR&page=${page}`,
-			);
-			const allMovies = response.data.results;
-			const totalPagesFromApi = Math.min(response.data.total_pages, 500);
-			const limitFilms = allMovies.slice(0, limit);
-			setMovies(limitFilms);
-			setTotalPages(totalPagesFromApi);
-			return limitFilms;
-		} catch (error) {
-			console.error(`error: ${error}`);
-			return [];
-		} finally {
-			setLoading(false);
-		}
+export default function AllMovies() {
+	const [currentPage, setCurrentPage] = useState(1);
+
+	const { data, isLoading, isError } = useQuery({
+		queryKey: ["movies", "popular", currentPage],
+		queryFn: () =>
+			fetchMovies({
+				limit: 20,
+				typeCategoryMovie: "popular",
+				page: currentPage,
+			}),
+		placeholderData: keepPreviousData,
+		staleTime: 1000 * 60 * 5,
+	});
+
+	if (isLoading) {
+		return <ComponentLoading />;
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-	useEffect(() => {
-		fetchMovies({ page: currentPage, limit: 20, typeCategoryMovie: "popular" });
-		scrollTo(0, 0);
-	}, [currentPage]);
-
-
-	if (loading) {
-		return <ComponentLoading />;
+	if (isError) {
+		return <p>Erro ao carregar os filmes dessa pagina!</p>
 	}
 
 	return (
 		<div className="flex flex-col gap-4">
 			<h1 className="text-2xl md:text-4xl font-medium">Principais filmes</h1>
 			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-				{movies.map((movie) => (
+				{data?.movies.map((movie: Movie) => (
 					<CardMovies
 						key={movie.id}
 						dataPub={movie.release_date}
@@ -87,14 +84,18 @@ export default function AllMovies() {
 						href="#"
 						onClick={(e) => {
 							e.preventDefault();
-							goPreviousPage({ page: currentPage, setter: setCurrentPage, totalPages: totalPages });
+							goPreviousPage({
+								page: currentPage,
+								setter: setCurrentPage,
+								totalPages: data?.totalPages,
+							});
 						}}
 						className={`${
 							currentPage === 1 ? "pointer-events-none opacity-50" : ""
 						} text-sm sm:text-base px-2 sm:px-3`}
 					/>
 
-					{getPaginationItems({ currentPage, totalPages, setCurrentPage })}
+					{getPaginationItems({ currentPage, totalPages: data?.totalPages || 1, setCurrentPage })}
 
 					<PaginationNext
 						href="#"
@@ -103,11 +104,11 @@ export default function AllMovies() {
 							goNextPage({
 								page: currentPage,
 								setter: setCurrentPage,
-								totalPages,
+								totalPages: data?.totalPages,
 							});
 						}}
 						className={`${
-							currentPage === totalPages ? "pointer-events-none opacity-50" : ""
+							currentPage === (data?.totalPages) ? "pointer-events-none opacity-50" : ""
 						} text-sm sm:text-base px-2 sm:px-3`}
 					/>
 				</PaginationContent>
